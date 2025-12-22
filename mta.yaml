@@ -1,7 +1,87 @@
 _schema-version: 3.3.0
 ID: EtagsDemo
+description: A simple CAP project.
 version: 1.0.0
-description: "A simple CAP project."
+modules:
+  - name: EtagsDemo-srv
+    type: nodejs
+    path: gen/srv
+    requires:
+      - name: EtagsDemo-db
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    parameters:
+      buildpack: nodejs_buildpack
+      instances: 1
+    build-parameters:
+      builder: npm-ci
+  - name: EtagsDemo-db-deployer
+    type: hdb
+    path: gen/db
+    requires:
+      - name: EtagsDemo-db
+    parameters:
+      buildpack: nodejs_buildpack
+  - name: EtagsDemo-destination-content
+    type: com.sap.application.content
+    requires:
+      - name: EtagsDemo-destination-service
+        parameters:
+          content-target: true
+      - name: EtagsDemo_html_repo_host
+        parameters:
+          service-key:
+            name: EtagsDemo_html_repo_host-key
+      - name: uaa_EtagsDemo
+        parameters:
+          service-key:
+            name: uaa_EtagsDemo-key
+    parameters:
+      content:
+        instance:
+          destinations:
+            - Name: zcon_EtagsDemo_html_repo_host
+              ServiceInstanceName: EtagsDemo-html5-app-host-service
+              ServiceKeyName: EtagsDemo_html_repo_host-key
+              sap.cloud.service: zcon
+            - Authentication: OAuth2UserTokenExchange
+              Name: zcon_uaa_EtagsDemo
+              ServiceInstanceName: EtagsDemo-xsuaa-service
+              ServiceKeyName: uaa_EtagsDemo-key
+              sap.cloud.service: zcon
+          existing_destinations_policy: ignore
+    build-parameters:
+      no-source: true
+resources:
+  - name: EtagsDemo-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+  - name: EtagsDemo-destination-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      config:
+        HTML5Runtime_enabled: true
+        version: 1.0.0
+      service: destination
+      service-name: EtagsDemo-destination-service
+      service-plan: lite
+  - name: EtagsDemo_html_repo_host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-name: EtagsDemo-html5-app-host-service
+      service-plan: app-host
+  - name: uaa_EtagsDemo
+    type: org.cloudfoundry.managed-service
+    parameters:
+      path: ./xs-security.json
+      service: xsuaa
+      service-name: EtagsDemo-xsuaa-service
+      service-plan: application
 parameters:
   enable-parallel-deployments: true
 build-parameters:
@@ -10,33 +90,3 @@ build-parameters:
       commands:
         - npm ci
         - npx cds build --production
-modules:
-  - name: EtagsDemo-srv
-    type: nodejs
-    path: gen/srv
-    parameters:
-      instances: 1
-      buildpack: nodejs_buildpack
-    build-parameters:
-      builder: npm-ci
-    provides:
-      - name: srv-api # required by consumers of CAP services (e.g. approuter)
-        properties:
-          srv-url: ${default-url}
-    requires:
-      - name: EtagsDemo-db
-
-  - name: EtagsDemo-db-deployer
-    type: hdb
-    path: gen/db
-    parameters:
-      buildpack: nodejs_buildpack
-    requires:
-      - name: EtagsDemo-db
-
-resources:
-  - name: EtagsDemo-db
-    type: com.sap.xs.hdi-container
-    parameters:
-      service: hana
-      service-plan: hdi-shared

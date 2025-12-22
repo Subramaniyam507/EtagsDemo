@@ -1,0 +1,56 @@
+@server=http://localhost:4004
+@username1=user1
+@password1=user1
+
+@username2=user2
+@password2=user2
+
+
+### Books
+# @name Books_GET
+GET {{server}}/odata/v4/optimistic-concurrency/Books
+Authorization: Basic  {{username1}}:{{password1}}
+
+
+### Books
+# @name Books_POST
+POST {{server}}/odata/v4/optimistic-concurrency/Books
+Content-Type: application/json
+Authorization: Basic {{username1}}:{{password1}}
+
+{
+  "ID": 8179469,
+  "title": "title-8179468",
+  "price": 5382513.4,
+  "createdAt": "2014-03-05T00:00:00.000Z",
+  "createdBy": "createdBy.4vbbg@example.com",
+  "modifiedAt": "2017-10-21T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.4vbbg@example.net"
+}
+
+
+### Books
+# @name Books_PATCH
+PATCH {{server}}/odata/v4/optimistic-concurrency/Books/29721391
+Authorization: Basic {{username1}}:{{password1}}
+Content-Type: application/json
+If-Match: W/"2025-12-20T03:55:21.774Z"
+
+
+
+{
+  "ID": 29721391,
+  "title": "title-8179468",
+  "price": 5382513.4,
+  "createdAt": "2014-03-05T00:00:00.000Z",
+  "createdBy": "createdBy.4vbbg@example.com",
+  "modifiedAt": "2017-10-21T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.4vbbg@example.net"
+}
+
+
+### Books
+# @name Books_DELETE
+DELETE {{server}}/odata/v4/optimistic-concurrency/Books/8179468
+Content-Type: application/json
+Authorization: Basic {{username1}}:{{password1}}

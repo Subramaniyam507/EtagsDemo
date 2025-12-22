@@ -1,0 +1,67 @@
+{
+  "xsappname": "etagsdemo",
+  "tenant-mode": "dedicated",
+  "description": "Security profile of called application",
+  "scopes": [
+    {
+      "name": "uaa.user",
+      "description": "UAA"
+    },
+    {
+      "name": "$XSAPPNAME.Admin",
+      "description": "Admin access"
+    },
+    {
+      "name": "$XSAPPNAME.Viewer",
+      "description": "Viewer access"
+    }
+  ],
+  "attributes": [
+    {
+      "name": "Country",
+      "description": "Country",
+      "valueType": "string"
+    }
+  ],
+  "role-templates": [
+    {
+      "name": "Token_Exchange",
+      "description": "UAA",
+      "scope-references": [
+        "uaa.user"
+      ]
+    },
+    {
+      "name": "Admin",
+      "description": "Admin role",
+      "scope-references": [
+        "$XSAPPNAME.Admin"
+      ],
+      "attribute-references": [
+        {
+          "name": "Country",
+          "default-values": [
+            "USA",
+            "Germany"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Viewer",
+      "description": "Viewer role",
+      "scope-references": [
+        "$XSAPPNAME.Viewer"
+      ],
+      "attribute-references": [
+        {
+          "name": "Country",
+          "default-values": [
+            "USA",
+            "Germany"
+          ]
+        }
+      ]
+    }
+  ]
+}

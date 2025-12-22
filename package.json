@@ -5,7 +5,10 @@
   "dependencies": {
     "@cap-js/hana": "^2",
     "@sap/cds": "^9",
-    "express": "^4"
+    "@sap/xsenv": "^6.0.0",
+    "@sap/xssec": "^4.12.1",
+    "express": "^4",
+    "passport": "^0.7.0"
   },
   "devDependencies": {
     "@cap-js/sqlite": "^2",
@@ -15,5 +18,33 @@
     "start": "cds-serve"
   },
   "private": true,
-  "cds": {}
+  "cds": {
+    "requires": {
+      "auth": {
+        "[hybrid]": {
+          "kind": "mocked",
+          "users": {
+            "user1": {
+              "password": "user1",
+              "roles": [
+                "authenticated-user",
+                "Viewer"
+              ],
+              "attr": {
+                "Country": "USA"
+              }
+            },
+            "user2": {
+              "password": "user2",
+              "roles": [
+                "authenticated-user",
+                "Admin"
+              ],
+              "attr": {"Country": "Germany"}
+            }
+          }
+        }
+      }
+    }
+  }
 }
