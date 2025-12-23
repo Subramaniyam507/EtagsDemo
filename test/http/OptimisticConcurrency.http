@@ -8,20 +8,28 @@
 
 ### Books
 # @name Books_GET
-GET {{server}}/odata/v4/optimistic-concurrency/Books
+GET {{server}}/odata/v4/optimistic-concurrency/Books?$filter=ID eq 7006609
 Authorization: Basic  {{username1}}:{{password1}}
 
+### user 1 get Books
+GET {{server}}/odata/v4/optimistic-concurrency/getBooks()
+Authorization: Basic  {{username1}}:{{password1}}
+### Books
+
+GET http://localhost:33831/odata/v4/optimistic-concurrency/Books
+Authorization: Basic  {{username2}}:{{password2}}
 
 ### Books
 # @name Books_POST
 POST {{server}}/odata/v4/optimistic-concurrency/Books
 Content-Type: application/json
-Authorization: Basic {{username1}}:{{password1}}
+Authorization: Basic {{username2}}:{{password1}}
 
 {
-  "ID": 8179469,
+  "ID": 12342,
   "title": "title-8179468",
   "price": 5382513.4,
+  "coutry" : "USA",
   "createdAt": "2014-03-05T00:00:00.000Z",
   "createdBy": "createdBy.4vbbg@example.com",
   "modifiedAt": "2017-10-21T00:00:00.000Z",
@@ -31,21 +39,15 @@ Authorization: Basic {{username1}}:{{password1}}
 
 ### Books
 # @name Books_PATCH
-PATCH {{server}}/odata/v4/optimistic-concurrency/Books/29721391
-Authorization: Basic {{username1}}:{{password1}}
+PATCH http://localhost:41899/odata/v4/optimistic-concurrency/Books/7006609
+Authorization: Basic {{username2}}:{{password2}}
 Content-Type: application/json
-If-Match: W/"2025-12-20T03:55:21.774Z"
-
-
+If-Match: W/"2025-12-23T02:35:11.324Z"
 
 {
-  "ID": 29721391,
-  "title": "title-8179468",
-  "price": 5382513.4,
-  "createdAt": "2014-03-05T00:00:00.000Z",
-  "createdBy": "createdBy.4vbbg@example.com",
-  "modifiedAt": "2017-10-21T00:00:00.000Z",
-  "modifiedBy": "modifiedBy.4vbbg@example.net"
+  "title": "title-sssss"
+ 
+ 
 }
 
 

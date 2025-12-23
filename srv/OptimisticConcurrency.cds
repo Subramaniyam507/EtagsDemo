@@ -3,9 +3,14 @@ using {db} from '../db/schema';
 service OptimisticConcurrency {
   
    @restrict: [
-    { grant: ['READ','CREATE'], to: ['Viewer'],where:(coutry=$user.Country)},
+    { grant: ['READ','CREATE'], to: ['Viewer']},
     { grant: '*', to: ['Admin'] ,},
-    {grant : 'UPDATE' , to:['Viewer'],where:(createdBy = $user)}
+    {grant : 'UPDATE' , to:['Viewer']}
   ]
   entity Books as projection on db.Books;
+
+
+  function getBooks() returns Books;
 }
+
+
